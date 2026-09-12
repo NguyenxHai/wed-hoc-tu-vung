@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ứng dụng học 30 từ vựng tiếng Anh với hiệu ứng lật thẻ 3D trực quan, phiên âm, phát âm chuẩn và phương pháp liên tưởng ghi nhớ sâu.">
+  <title>Học Từ Vựng Tiếng Anh - Thẻ Lật Ghi Nhớ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-content">
+        <h1 class="app-title">Học Từ Vựng Tiếng Anh</h1>
+        <p class="app-subtitle">Phương pháp lật thẻ trực quan kết hợp phát âm và mẹo liên tưởng sâu</p>
+      </div>
+
+      <div class="day-tracker-panel">
+        <div class="day-tracker-header">
+          <div>
+            <span class="day-badge" id="day-badge">Ngày 1 / 12</span>
+            <span class="day-title" id="day-display-title">Chủ đề: Tính cách và Tư duy (20 từ)</span>
+          </div>
+          <span class="day-progress-desc" id="day-progress-desc">Đã thuộc: 0 / 20 từ hôm nay</span>
+        </div>
+        
+        <div class="day-controls">
+          <div class="day-select-group">
+            <label for="day-select" class="day-select-label">Đợt học:</label>
+            <select id="day-select" class="day-select-dropdown">
+              <option value="today">Hôm nay (20 từ mới tiếp theo)</option>
+              <option value="1" selected>Ngày 1 (Từ 1 - 20)</option>
+              <option value="2">Ngày 2 (Từ 21 - 40)</option>
+              <option value="3">Ngày 3 (Từ 41 - 60)</option>
+              <option value="4">Ngày 4 (Từ 61 - 80)</option>
+              <option value="5">Ngày 5 (Từ 81 - 100)</option>
+              <option value="6">Ngày 6 (Từ 101 - 120)</option>
+              <option value="7">Ngày 7 (Từ 121 - 140)</option>
+              <option value="8">Ngày 8 (Từ 141 - 160)</option>
+              <option value="9">Ngày 9 (Từ 161 - 180)</option>
+              <option value="10">Ngày 10 (Từ 181 - 200)</option>
+              <option value="11">Ngày 11 (Từ 201 - 220)</option>
+              <option value="12">Ngày 12 (Từ 221 - 240)</option>
+              <option value="all">Toàn bộ kho từ (240 từ)</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" id="next-day-btn">
+            <span>Sang ngày tiếp theo</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-box">
+          <span class="stat-label">Số từ đợt này</span>
+          <span class="stat-value" id="total-count">20</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Đã thuộc</span>
+          <span class="stat-value text-success" id="mastered-count">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Cần ôn tập</span>
+          <span class="stat-value text-warning" id="review-count">0</span>
+        </div>
+      </div>
+
+      <div class="progress-wrapper">
+        <div class="progress-info">
+          <span id="current-index-label">Thẻ 1 / 20</span>
+          <span id="progress-percent">5%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-bar"></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-controls-row">
+      <div class="filter-controls">
+        <button type="button" class="filter-btn active" data-filter="all" id="filter-all-btn">Tất cả</button>
+        <button type="button" class="filter-btn" data-filter="learning" id="filter-learning-btn">Chưa thuộc</button>
+        <button type="button" class="filter-btn" data-filter="mastered" id="filter-mastered-btn">Đã thuộc</button>
+      </div>
+      
+      <div class="test-mode-wrapper">
+        <label class="toggle-switch">
+          <input type="checkbox" id="test-mode-checkbox">
+          <span class="slider round"></span>
+        </label>
+        <span class="toggle-label" title="Ẩn từ tiếng Anh, hiện nghĩa tiếng Việt để bạn tự gõ">Chế độ kiểm tra</span>
+      </div>
+    </div>
+
+    <main class="card-stage">
+      <div class="flashcard-scene" id="flashcard-scene">
+        <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Thẻ từ vựng, nhấp để lật">
+          
+          <!-- Mặt trước -->
+          <div class="card-face card-front">
+            <div class="card-top-bar">
+              <span class="card-category" id="card-type">Tính từ</span>
+              <span class="card-index-tag" id="card-badge">01 / 30</span>
+            </div>
+
+            <div class="card-center">
+              <div id="card-front-normal">
+                <h2 class="card-word" id="card-word">Resilient</h2>
+                <p class="card-phonetic" id="card-phonetic">/rɪˈzɪl.jənt/</p>
+                
+                <div class="audio-btn-wrapper">
+                  <button type="button" class="audio-action-btn" id="audio-btn" aria-label="Nghe phát âm">
+                    <svg class="btn-svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    </svg>
+                    <span>Phát âm</span>
+                  </button>
+                </div>
+              </div>
+              <div id="card-front-test" style="display: none;">
+                <h2 class="card-word-meaning-test" id="card-meaning-test">Kiên cường, có khả năng phục hồi nhanh chóng sau khó khăn</h2>
+                <div class="test-input-wrapper">
+                  <input type="text" id="test-word-input" class="test-input" placeholder="Gõ từ tiếng Anh vào đây..." autocomplete="off">
+                  <button type="button" id="check-word-btn" class="btn btn-primary btn-sm">Kiểm tra</button>
+                </div>
+                <p id="test-feedback" class="test-feedback"></p>
+              </div>
+            </div>
+
+            <div class="card-bottom-hint">
+              <span id="front-hint-text">Nhấp hoặc nhấn phím Cách để lật xem giải nghĩa</span>
+            </div>
+          </div>
+
+          <!-- Mặt sau -->
+          <div class="card-face card-back">
+            <div class="card-top-bar">
+              <span class="card-category" id="card-back-word">Resilient</span>
+              <span class="card-status-pill" id="card-status-text">Đang học</span>
+            </div>
+
+            <div class="card-back-body">
+              <div class="info-block">
+                <span class="info-title">Nghĩa tiếng Việt</span>
+                <p class="meaning-text" id="card-meaning">Kiên cường, có khả năng phục hồi nhanh chóng sau khó khăn</p>
+              </div>
+
+              <div class="info-block">
+                <span class="info-title">Ví dụ minh họa</span>
+                <p class="example-en" id="card-example-en">"She is resilient and remains focused despite many challenges."</p>
+                <p class="example-vi" id="card-example-vi">Cô ấy rất kiên cường và luôn tập trung bất chấp nhiều thử thách.</p>
+              </div>
+
+              <div class="info-block highlight-block">
+                <span class="info-title">Mẹo liên tưởng ghi nhớ</span>
+                <p class="tip-text" id="card-tip">Gợi nhớ hình ảnh một chiếc lò xo bị nén xuống nhưng luôn bật dậy mạnh mẽ.</p>
+              </div>
+
+              <div class="info-block">
+                <span class="info-title">Cụm từ thông dụng</span>
+                <p class="collocation-text" id="card-collocation">Resilient mindset</p>
+              </div>
+            </div>
+
+            <div class="card-bottom-hint">
+              <span>Nhấp để quay lại mặt trước</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <nav class="action-panel">
+      <div class="control-row navigation-row">
+        <button type="button" class="btn btn-secondary" id="prev-btn" aria-label="Từ trước">
+          <svg class="btn-svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+          </svg>
+          <span>Trước</span>
+        </button>
+
+        <button type="button" class="btn btn-primary" id="flip-btn" aria-label="Lật thẻ">
+          <svg class="btn-svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+          </svg>
+          <span>Lật thẻ</span>
+        </button>
+
+        <button type="button" class="btn btn-secondary" id="next-btn" aria-label="Từ tiếp theo">
+          <span>Tiếp</span>
+          <svg class="btn-svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="control-row status-row">
+        <button type="button" class="btn btn-action-review" id="mark-review-btn">
+          <span>Cần ôn lại</span>
+        </button>
+        <button type="button" class="btn btn-action-master" id="mark-master-btn">
+          <span>Đã thuộc</span>
+        </button>
+        <button type="button" class="btn btn-outline" id="shuffle-btn">
+          <svg class="btn-svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/>
+          </svg>
+          <span>Xáo trộn</span>
+        </button>
+      </div>
+
+      <div class="control-row manage-row">
+        <button type="button" class="btn btn-secondary btn-sm" id="edit-current-btn">
+          <span>Sửa thẻ này</span>
+        </button>
+        <button type="button" class="btn btn-outline btn-sm text-danger" id="delete-current-btn">
+          <span>Xóa thẻ này</span>
+        </button>
+      </div>
+    </nav>
+
+    <section class="word-list-section">
+      <div class="word-list-header">
+        <div>
+          <h2 class="word-list-title" id="word-list-title">Danh sách từ vựng</h2>
+          <span class="word-list-note">Nhấp vào từ bất kỳ để mở thẻ học</span>
+        </div>
+        <div class="list-actions">
+          <button type="button" class="btn btn-primary btn-sm" id="ai-generate-btn" style="background-color: #8b5cf6; border-color: #8b5cf6; box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);">
+            <span>✨ Lấy thêm từ (AI)</span>
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" id="open-bulk-btn">
+            <span>Nhập nhanh kho từ</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="open-add-btn">
+            <span>Thêm từ lẻ</span>
+          </button>
+          <button type="button" class="btn btn-outline btn-sm" id="restart-cycle-btn">
+            <span>Học lại chu kỳ</span>
+          </button>
+          <button type="button" class="btn btn-outline btn-sm" id="ai-settings-btn" style="border-color: #8b5cf6; color: #8b5cf6;">
+            <span>🤖 Cài đặt AI</span>
+          </button>
+          <button type="button" class="btn btn-outline btn-sm" id="reset-words-btn">
+            <span>Kho mẫu 240 từ</span>
+          </button>
+        </div>
+      </div>
+      <div class="word-grid" id="word-grid"></div>
+    </section>
+
+    <!-- Hộp thoại thêm / sửa từ vựng -->
+    <div class="modal-overlay" id="word-modal" aria-hidden="true">
+      <div class="modal-box" role="dialog" aria-labelledby="modal-title">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modal-title">Thêm từ vựng mới</h3>
+          <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Đóng">&times;</button>
+        </div>
+        
+        <form id="word-form" class="modal-form">
+          <input type="hidden" id="form-word-id" value="">
+          
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label for="form-word" class="form-label">Từ tiếng Anh (bắt buộc)</label>
+              <input type="text" id="form-word" class="form-input" placeholder="Ví dụ: Resilient" required>
+            </div>
+            
+            <div class="form-group flex-1">
+              <label for="form-type" class="form-label">Từ loại</label>
+              <select id="form-type" class="form-select">
+                <option value="Tính từ">Tính từ</option>
+                <option value="Danh từ">Danh từ</option>
+                <option value="Động từ">Động từ</option>
+                <option value="Trạng từ">Trạng từ</option>
+                <option value="Cụm từ">Cụm từ</option>
+                <option value="Giới từ">Giới từ</option>
+                <option value="Khác">Khác</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="form-phonetic" class="form-label">Phiên âm quốc tế</label>
+              <input type="text" id="form-phonetic" class="form-input" placeholder="Ví dụ: /rɪˈzɪl.jənt/">
+            </div>
+            
+            <div class="form-group flex-2">
+              <label for="form-meaning" class="form-label">Nghĩa tiếng Việt (bắt buộc)</label>
+              <input type="text" id="form-meaning" class="form-input" placeholder="Ví dụ: Kiên cường, mau phục hồi" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="form-example-en" class="form-label">Câu ví dụ tiếng Anh</label>
+            <input type="text" id="form-example-en" class="form-input" placeholder="Ví dụ: She remains resilient in any situation.">
+          </div>
+
+          <div class="form-group">
+            <label for="form-example-vi" class="form-label">Dịch nghĩa câu ví dụ</label>
+            <input type="text" id="form-example-vi" class="form-input" placeholder="Ví dụ: Cô ấy luôn kiên cường trong mọi hoàn cảnh.">
+          </div>
+
+          <div class="form-group">
+            <label for="form-tip" class="form-label">Mẹo liên tưởng ghi nhớ nhanh</label>
+            <textarea id="form-tip" class="form-textarea" rows="2" placeholder="Gợi ý liên tưởng hình ảnh hoặc ngữ cảnh giúp nhớ sâu..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="form-collocation" class="form-label">Cụm từ thông dụng</label>
+            <input type="text" id="form-collocation" class="form-input" placeholder="Ví dụ: Resilient mindset">
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="modal-cancel-btn">Hủy bỏ</button>
+            <button type="submit" class="btn btn-primary" id="modal-submit-btn">Lưu thẻ từ</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Hộp thoại nạp nhanh kho từ vựng hàng loạt -->
+    <div class="modal-overlay" id="bulk-import-modal" aria-hidden="true">
+      <div class="modal-box" role="dialog" aria-labelledby="bulk-modal-title">
+        <div class="modal-header">
+          <h3 class="modal-title" id="bulk-modal-title">Nhập kho từ vựng cá nhân</h3>
+          <button type="button" class="modal-close-btn" id="bulk-close-btn" aria-label="Đóng">&times;</button>
+        </div>
+
+        <div class="bulk-guide">
+          <p class="bulk-desc">Dán danh sách từ 50 đến 300 từ vựng của bạn vào ô bên dưới. Hệ thống sẽ tự động phân bổ thành các đợt học 20 từ mỗi ngày không lặp lại.</p>
+          <div class="bulk-format-tip">
+            <span class="bulk-format-label">Định dạng đơn giản (mỗi dòng một từ):</span>
+            <div class="format-sample">Từ - Nghĩa tiếng Việt</div>
+            <span class="format-alt">Ví dụ: Resilient - Kiên cường, mau phục hồi</span>
+          </div>
+        </div>
+
+        <form id="bulk-import-form" class="modal-form">
+          <div class="form-group">
+            <label for="bulk-text" class="form-label">Danh sách từ vựng:</label>
+            <textarea id="bulk-text" class="form-textarea bulk-textarea" rows="8" placeholder="Resilient - Kiên cường&#10;Persevere - Kiên trì bền chí&#10;Diligent - Cần cù chăm chỉ&#10;Empathy - Sự đồng cảm thấu hiểu..."></textarea>
+          </div>
+
+          <div class="bulk-options">
+            <label class="radio-label">
+              <input type="radio" name="import-mode" value="replace" checked>
+              <span>Thay thế kho từ hiện tại (Bắt đầu kho học mới)</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="import-mode" value="append">
+              <span>Thêm nối tiếp vào kho từ hiện có</span>
+            </label>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="bulk-cancel-btn">Hủy bỏ</button>
+            <button type="submit" class="btn btn-primary" id="bulk-submit-btn">Nạp kho từ</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <footer class="app-footer">
+      <p>Phím tắt: Phím Cách để lật thẻ | Phím mũi tên Trái/Phải để chuyển thẻ</p>
+    </footer>
+    <!-- Hộp thoại cài đặt AI -->
+    <div class="modal-overlay" id="ai-settings-modal" aria-hidden="true">
+      <div class="modal-box" role="dialog" aria-labelledby="ai-modal-title">
+        <div class="modal-header">
+          <h3 class="modal-title" id="ai-modal-title" style="color: #8b5cf6;">Cài đặt AI (Google Gemini)</h3>
+          <button type="button" class="modal-close-btn" id="ai-close-btn" aria-label="Đóng">&times;</button>
+        </div>
+
+        <div class="bulk-guide">
+          <p class="bulk-desc">Tính năng tự động sinh từ vựng sử dụng sức mạnh của Google Gemini. Dữ liệu kho từ của bạn sẽ được kiểm tra để đảm bảo từ vựng mới hoàn toàn không trùng lặp.</p>
+          <div class="bulk-format-tip" style="background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.3);">
+            <span class="bulk-format-label" style="color: #8b5cf6;">Hướng dẫn:</span>
+            <div class="format-sample">Bạn cần có một API Key miễn phí từ Google AI Studio. Mã này sẽ chỉ được lưu trên trình duyệt của bạn (localStorage).</div>
+          </div>
+        </div>
+
+        <form id="ai-settings-form" class="modal-form" style="margin-top: 20px;">
+          <div class="form-group">
+            <label for="ai-api-key" class="form-label">Gemini API Key</label>
+            <input type="password" id="ai-api-key" class="form-input" placeholder="Nhập API Key bắt đầu bằng AIza..." required>
+          </div>
+          
+          <div class="form-group">
+            <label for="ai-topic" class="form-label">Chủ đề ưu tiên (Không bắt buộc)</label>
+            <input type="text" id="ai-topic" class="form-input" placeholder="Ví dụ: Công nghệ thông tin, Giao tiếp hàng ngày, IELTS...">
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="ai-cancel-btn">Hủy bỏ</button>
+            <button type="submit" class="btn btn-primary" id="ai-save-btn" style="background-color: #8b5cf6; border-color: #8b5cf6;">Lưu cài đặt</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Hộp thoại Loading AI -->
+    <div class="modal-overlay" id="ai-loading-modal" aria-hidden="true" style="z-index: 2000;">
+      <div class="modal-box" style="text-align: center; max-width: 400px; padding: 40px 20px;">
+        <div class="loading-spinner" style="border: 4px solid rgba(139, 92, 246, 0.2); border-top: 4px solid #8b5cf6; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+        <h3 style="color: #8b5cf6; margin-bottom: 10px;">AI đang tìm từ vựng mới...</h3>
+        <p class="bulk-desc" style="margin: 0;">Vui lòng đợi vài giây trong khi Gemini tạo các từ vựng chất lượng kèm theo phiên âm và ví dụ.</p>
+      </div>
+    </div>
+
+    <!-- Custom CSS for AI features -->
+    <style>
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      #ai-generate-btn:hover { background-color: #7c3aed; box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4); }
+      #ai-settings-btn:hover { background-color: rgba(139, 92, 246, 0.1); }
+    </style>
+
+  </div>
+
+  <script src="words_data.js"></script>
+  <script src="app.js?v=999"></script>
+</body>
+</html>
